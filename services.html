@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서비스 | 정이든 마케팅</title>
+    <meta name="description" content="CRM 구축, AI와 바이브코딩 교육, 온라인 BM 컨설팅, 마케팅 대행 서비스를 제공합니다.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .page-header {
+            padding: 140px 0 60px;
+            background: var(--bg-secondary);
+            text-align: center;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .page-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 16px;
+        }
+
+        .page-desc {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .services-page-section {
+            padding: 80px 0;
+        }
+
+        .service-detail {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            padding: 60px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .service-detail:last-child {
+            border-bottom: none;
+        }
+
+        .service-detail:nth-child(even) {
+            direction: rtl;
+        }
+
+        .service-detail:nth-child(even)>* {
+            direction: ltr;
+        }
+
+        @media (max-width: 1024px) {
+
+            .service-detail,
+            .service-detail:nth-child(even) {
+                grid-template-columns: 1fr;
+                direction: ltr;
+                gap: 40px;
+            }
+        }
+
+        .service-visual {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 350px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-visual::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
+        }
+
+        .service-visual-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .service-visual-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .service-visual-feature {
+            padding: 8px 16px;
+            background: var(--bg-tertiary);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .service-info {
+            padding: 20px 0;
+        }
+
+        .service-info-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 50px;
+            font-size: 0.8125rem;
+            color: var(--primary-light);
+            margin-bottom: 20px;
+        }
+
+        .service-info-title {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            margin-bottom: 16px;
+        }
+
+        .service-info-desc {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+
+        .service-features-list {
+            margin-bottom: 24px;
+        }
+
+        .service-feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            color: var(--text-secondary);
+        }
+
+        .service-feature-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.75rem;
+        }
+
+        .service-benefits {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .service-benefit {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.875rem;
+            color: #10B981;
+            font-weight: 600;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 0;
+            background: var(--gradient-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: white;
+        }
+
+        .cta-title {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .cta-desc {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            margin-bottom: 32px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-white {
+            background: white;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .btn-white:hover {
+            background: #F8FAFC;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-logo">
+                <img src="assets/images/logo.png" alt="정이든 마케팅" class="navbar-logo-img">
+            </a>
+
+            <div class="navbar-menu">
+                <a href="index.html" class="navbar-link">홈</a>
+                <a href="portfolio.html" class="navbar-link">포트폴리오</a>
+                <a href="services.html" class="navbar-link active">서비스</a>
+                <a href="contact.html" class="navbar-link">문의하기</a>
+            </div>
+
+            <div class="navbar-actions">
+                <button class="theme-toggle" aria-label="테마 변경">☀️</button>
+                <a href="contact.html" class="btn btn-primary btn-sm">무료 상담</a>
+                <button class="mobile-menu-btn" aria-label="메뉴 열기">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1 class="page-title">서비스</h1>
+            <p class="page-desc">AI와 자동화 기술로 비즈니스 성장을 돕는 맞춤형 서비스를 제공합니다.</p>
+        </div>
+    </header>
+
+    <!-- Services Detail -->
+    <section class="services-page-section">
+        <div class="container" id="services-container">
+            <!-- 동적으로 생성됨 -->
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content reveal">
+                <h2 class="cta-title">어떤 서비스가 필요하신가요?</h2>
+                <p class="cta-desc">무료 상담을 통해 비즈니스에 맞는 최적의 솔루션을 찾아드립니다.</p>
+                <a href="contact.html" class="btn btn-white btn-lg">무료 상담 신청 →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-brand-logo">
+                        <img src="assets/images/logo.png" alt="정이든 마케팅" class="footer-logo-img">
+                    </div>
+                    <p class="footer-brand-desc">
+                        정직한 · 이로운 · 든든한<br>
+                        AI와 바이브코딩으로 비즈니스 성장을 돕습니다.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="footer-heading">서비스</h4>
+                    <div class="footer-links">
+                        <a href="services.html#crm" class="footer-link">CRM 구축</a>
+                        <a href="services.html#education" class="footer-link">AI와 바이브코딩 교육</a>
+                        <a href="services.html#consulting" class="footer-link">온라인 BM 컨설팅</a>
+                        <a href="services.html#marketing" class="footer-link">온라인 마케팅 대행</a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="footer-heading">바로가기</h4>
+                    <div class="footer-links">
+                        <a href="portfolio.html" class="footer-link">포트폴리오</a>
+                        <a href="contact.html" class="footer-link">문의하기</a>
+                        <a href="admin.html" class="footer-link">관리자</a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="footer-heading">문의</h4>
+                    <div class="footer-links">
+                        <a href="mailto:contact@jeid.marketing" class="footer-link">contact@jeid.marketing</a>
+                        <span class="footer-link">평일 10:00 - 18:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2025 정이든 마케팅. All rights reserved.</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Instagram">📷</a>
+                    <a href="#" aria-label="YouTube">▶️</a>
+                    <a href="#" aria-label="Blog">📝</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        const serviceAnchors = ['crm', 'education', 'consulting', 'marketing'];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderServices();
+        });
+
+        function renderServices() {
+            const container = document.getElementById('services-container');
+            const services = dataManager.getServices();
+
+            container.innerHTML = services.map((service, index) => `
+        <div class="service-detail reveal" id="${serviceAnchors[index] || 'service-' + service.id}">
+          <div class="service-visual">
+            <div class="service-visual-icon">${service.icon}</div>
+            <div class="service-visual-features">
+              ${service.features.slice(0, 3).map(f => `
+                <span class="service-visual-feature">${f}</span>
+              `).join('')}
+            </div>
+          </div>
+          
+          <div class="service-info">
+            <div class="service-info-label">
+              <span>✨</span> SERVICE ${String(index + 1).padStart(2, '0')}
+            </div>
+            <h2 class="service-info-title">${service.title}</h2>
+            <p class="service-info-desc">${service.description}</p>
+            
+            <div class="service-features-list">
+              ${service.features.map(f => `
+                <div class="service-feature-item">
+                  <span class="service-feature-icon">✓</span>
+                  <span>${f}</span>
+                </div>
+              `).join('')}
+            </div>
+            
+            <div class="service-benefits">
+              ${service.benefits.map(b => `
+                <div class="service-benefit">
+                  <span>🎯</span>
+                  <span>${b}</span>
+                </div>
+              `).join('')}
+            </div>
+            
+            <a href="contact.html" class="btn btn-primary mt-3">이 서비스 문의하기 →</a>
+          </div>
+        </div>
+      `).join('');
+
+            // Scroll reveal 재초기화
+            initScrollReveal();
+
+            // URL 해시가 있으면 해당 섹션으로 스크롤
+            if (window.location.hash) {
+                setTimeout(() => {
+                    const target = document.querySelector(window.location.hash);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 300);
+            }
+        }
+    </script>
+</body>
+
+</html>

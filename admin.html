@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 | 정이든 마케팅</title>
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .admin-container {
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+
+        /* Login */
+        .login-section {
+            min-height: calc(100vh - 80px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .login-card {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 48px;
+            width: 100%;
+            max-width: 420px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .login-icon {
+            font-size: 3rem;
+            margin-bottom: 24px;
+        }
+
+        .login-title {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .login-desc {
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+
+        .login-error {
+            background: rgba(239, 68, 68, 0.15);
+            color: #EF4444;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 0.875rem;
+            display: none;
+        }
+
+        .login-error.show {
+            display: block;
+        }
+
+        /* Dashboard */
+        .dashboard-section {
+            padding: 40px 0;
+            display: none;
+        }
+
+        .dashboard-section.show {
+            display: block;
+        }
+
+        .dashboard-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .dashboard-title {
+            font-size: 1.75rem;
+        }
+
+        .dashboard-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 32px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 16px;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            color: var(--primary-light);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -17px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-glass);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .data-table th {
+            background: var(--bg-secondary);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table tr:hover td {
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-icon:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .btn-icon.danger:hover {
+            background: rgba(239, 68, 68, 0.15);
+            color: #EF4444;
+        }
+
+        .table-image {
+            width: 60px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .table-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .table-badge.pending {
+            background: rgba(245, 158, 11, 0.15);
+            color: #F59E0B;
+        }
+
+        .table-badge.completed {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10B981;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        /* Modal Form */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: var(--z-modal);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal.open {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px 32px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            background: var(--bg-tertiary);
+            border: none;
+            border-radius: 50%;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .modal-body {
+            padding: 32px;
+        }
+
+        .modal-footer {
+            padding: 24px 32px;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .result-input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 12px;
+            align-items: end;
+            margin-bottom: 12px;
+        }
+
+        .results-list {
+            margin-top: 16px;
+        }
+
+        .result-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .result-remove {
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .result-remove:hover {
+            color: #EF4444;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+        }
+
+        .empty-state-title {
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-logo">
+                <img src="assets/images/logo.png" alt="정이든 마케팅" class="navbar-logo-img">
+            </a>
+
+            <div class="navbar-menu">
+                <a href="index.html" class="navbar-link">홈</a>
+                <a href="portfolio.html" class="navbar-link">포트폴리오</a>
+                <a href="services.html" class="navbar-link">서비스</a>
+                <a href="contact.html" class="navbar-link">문의하기</a>
+            </div>
+
+            <div class="navbar-actions">
+                <button class="theme-toggle" aria-label="테마 변경">☀️</button>
+                <button class="mobile-menu-btn" aria-label="메뉴 열기">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="admin-container">
+        <!-- Login Section -->
+        <section class="login-section" id="login-section">
+            <div class="login-card">
+                <div class="login-icon">🔐</div>
+                <h1 class="login-title">관리자 로그인</h1>
+                <p class="login-desc">관리자 비밀번호를 입력해주세요.</p>
+
+                <div class="login-error" id="login-error">
+                    비밀번호가 일치하지 않습니다.
+                </div>
+
+                <form id="login-form">
+                    <div class="form-group">
+                        <input type="password" id="admin-password" class="form-input" placeholder="비밀번호" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">로그인</button>
+                </form>
+
+                <p style="margin-top: 24px; font-size: 0.75rem; color: var(--text-muted);">
+                    테스트용 비밀번호: jeid2025
+                </p>
+            </div>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section class="dashboard-section" id="dashboard-section">
+            <div class="container">
+                <div class="dashboard-header">
+                    <h1 class="dashboard-title">관리자 대시보드</h1>
+                    <div class="dashboard-actions">
+                        <button class="btn btn-primary" onclick="openModal('add-portfolio-modal')">
+                            + 포트폴리오 추가
+                        </button>
+                        <button class="btn btn-ghost" onclick="logout()">로그아웃</button>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="portfolios">포트폴리오</button>
+                    <button class="tab-btn" data-tab="inquiries">문의 내역</button>
+                </div>
+
+                <!-- Portfolios Tab -->
+                <div class="tab-content active" id="portfolios-tab">
+                    <div class="table-responsive">
+                        <table class="data-table" id="portfolios-table">
+                            <thead>
+                                <tr>
+                                    <th>이미지</th>
+                                    <th>제목</th>
+                                    <th>업종</th>
+                                    <th>고객</th>
+                                    <th>추천</th>
+                                    <th>작업</th>
+                                </tr>
+                            </thead>
+                            <tbody id="portfolios-tbody">
+                                <!-- 동적으로 생성됨 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Inquiries Tab -->
+                <div class="tab-content" id="inquiries-tab">
+                    <div class="table-responsive">
+                        <table class="data-table" id="inquiries-table">
+                            <thead>
+                                <tr>
+                                    <th>이름</th>
+                                    <th>이메일</th>
+                                    <th>업종</th>
+                                    <th>관심 서비스</th>
+                                    <th>상태</th>
+                                    <th>날짜</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inquiries-tbody">
+                                <!-- 동적으로 생성됨 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Add Portfolio Modal -->
+    <div class="modal" id="add-portfolio-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">새 포트폴리오 추가</h2>
+                <button class="modal-close" onclick="closeModal('add-portfolio-modal')">×</button>
+            </div>
+            <form id="add-portfolio-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">프로젝트 제목 *</label>
+                        <input type="text" name="title" class="form-input" placeholder="AI 활용 온라인 강의 자동화 시스템" required>
+                    </div>
+
+                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div class="form-group">
+                            <label class="form-label">업종 *</label>
+                            <select name="category" class="form-select" required>
+                                <option value="lesson-coaching">레슨 및 코칭</option>
+                                <option value="counselor">상담가</option>
+                                <option value="small-business">소상공인</option>
+                                <option value="sales">영업직</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">고객명 *</label>
+                            <input type="text" name="client" class="form-input" placeholder="김민준 강사" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">프로젝트 설명 *</label>
+                        <textarea name="description" class="form-textarea" placeholder="프로젝트 개요를 입력하세요"
+                            required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">문제 상황</label>
+                        <input type="text" name="challenge" class="form-input" placeholder="수강생 증가에 따른 문의 응대 과부하">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">솔루션</label>
+                        <input type="text" name="solution" class="form-input" placeholder="AI 챗봇 + 자동 이메일 시퀀스 구축">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">성과 지표</label>
+                        <div id="results-container"></div>
+                        <div class="result-input-group">
+                            <input type="text" id="result-label" class="form-input" placeholder="라벨 (예: 수강생 증가)">
+                            <input type="text" id="result-value" class="form-input" placeholder="값 (예: 150%)">
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="addResult()">추가</button>
+                        </div>
+                        <div class="results-list" id="results-list"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">고객 후기</label>
+                        <input type="text" name="testimonial" class="form-input" placeholder="고객 후기를 입력하세요">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">이미지 URL</label>
+                        <input type="url" name="image" class="form-input" placeholder="https://example.com/image.jpg">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-item" style="display: inline-flex;">
+                            <input type="checkbox" name="featured">
+                            <span>메인 페이지에 표시 (추천)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost" onclick="closeModal('add-portfolio-modal')">취소</button>
+                    <button type="submit" class="btn btn-primary">저장하기</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+                <p>© 2025 정이든 마케팅. 관리자 페이지</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // 카테고리 라벨 매핑
+        const categoryLabels = {
+            'lesson-coaching': '레슨 및 코칭',
+            'counselor': '상담가',
+            'small-business': '소상공인',
+            'sales': '영업직'
+        };
+
+        // 결과 임시 저장
+        let tempResults = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            initTabs();
+            initLoginForm();
+            initAddPortfolioForm();
+        });
+
+        // 인증 확인
+        function checkAuth() {
+            if (dataManager.isAuthenticated()) {
+                showDashboard();
+            }
+        }
+
+        // 로그인 폼
+        function initLoginForm() {
+            const form = document.getElementById('login-form');
+            const errorEl = document.getElementById('login-error');
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const password = document.getElementById('admin-password').value;
+
+                if (dataManager.login(password)) {
+                    showDashboard();
+                } else {
+                    errorEl.classList.add('show');
+                    setTimeout(() => errorEl.classList.remove('show'), 3000);
+                }
+            });
+        }
+
+        // 대시보드 표시
+        function showDashboard() {
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('dashboard-section').classList.add('show');
+            renderPortfolios();
+            renderInquiries();
+        }
+
+        // 로그아웃
+        function logout() {
+            dataManager.logout();
+            location.reload();
+        }
+
+        // 탭 초기화
+        function initTabs() {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tab = btn.dataset.tab;
+
+                    // 버튼 활성화
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    // 콘텐츠 표시
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    document.getElementById(`${tab}-tab`).classList.add('active');
+                });
+            });
+        }
+
+        // 포트폴리오 목록 렌더링
+        function renderPortfolios() {
+            const tbody = document.getElementById('portfolios-tbody');
+            const portfolios = dataManager.getPortfolios();
+
+            if (portfolios.length === 0) {
+                tbody.innerHTML = `
+          <tr>
+            <td colspan="6">
+              <div class="empty-state">
+                <div class="empty-state-icon">📂</div>
+                <p>등록된 포트폴리오가 없습니다.</p>
+              </div>
+            </td>
+          </tr>
+        `;
+                return;
+            }
+
+            tbody.innerHTML = portfolios.map(p => `
+        <tr>
+          <td><img src="${p.image || 'https://via.placeholder.com/60x40'}" alt="${p.title}" class="table-image"></td>
+          <td><strong>${p.title}</strong></td>
+          <td>${p.categoryLabel}</td>
+          <td>${p.client}</td>
+          <td>${p.featured ? '⭐' : '-'}</td>
+          <td>
+            <div class="table-actions">
+              <button class="btn-icon danger" onclick="deletePortfolio(${p.id})" title="삭제">🗑️</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+        }
+
+        // 문의 목록 렌더링
+        function renderInquiries() {
+            const tbody = document.getElementById('inquiries-tbody');
+            const inquiries = dataManager.getInquiries();
+
+            if (inquiries.length === 0) {
+                tbody.innerHTML = `
+          <tr>
+            <td colspan="6">
+              <div class="empty-state">
+                <div class="empty-state-icon">📬</div>
+                <p>아직 문의 내역이 없습니다.</p>
+              </div>
+            </td>
+          </tr>
+        `;
+                return;
+            }
+
+            tbody.innerHTML = inquiries.map(inq => `
+        <tr>
+          <td><strong>${inq.name}</strong></td>
+          <td>${inq.email}</td>
+          <td>${inq.business || '-'}</td>
+          <td>${inq.services?.join(', ') || '-'}</td>
+          <td><span class="table-badge ${inq.status}">${inq.status === 'pending' ? '대기 중' : '완료'}</span></td>
+          <td>${formatDate(inq.createdAt)}</td>
+        </tr>
+      `).join('');
+        }
+
+        // 포트폴리오 삭제
+        function deletePortfolio(id) {
+            if (confirm('정말 삭제하시겠습니까?')) {
+                dataManager.deletePortfolio(id);
+                renderPortfolios();
+                showToast('포트폴리오가 삭제되었습니다.', 'success');
+            }
+        }
+
+        // 결과 추가
+        function addResult() {
+            const label = document.getElementById('result-label').value.trim();
+            const value = document.getElementById('result-value').value.trim();
+
+            if (label && value) {
+                tempResults.push({ label, value });
+                renderResults();
+                document.getElementById('result-label').value = '';
+                document.getElementById('result-value').value = '';
+            }
+        }
+
+        // 결과 렌더링
+        function renderResults() {
+            const list = document.getElementById('results-list');
+            list.innerHTML = tempResults.map((r, i) => `
+        <div class="result-item">
+          <span>${r.label}: ${r.value}</span>
+          <span class="result-remove" onclick="removeResult(${i})">×</span>
+        </div>
+      `).join('');
+        }
+
+        // 결과 삭제
+        function removeResult(index) {
+            tempResults.splice(index, 1);
+            renderResults();
+        }
+
+        // 포트폴리오 추가 폼
+        function initAddPortfolioForm() {
+            const form = document.getElementById('add-portfolio-form');
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const formData = new FormData(form);
+                const category = formData.get('category');
+
+                const portfolio = {
+                    title: formData.get('title'),
+                    category: category,
+                    categoryLabel: categoryLabels[category],
+                    client: formData.get('client'),
+                    description: formData.get('description'),
+                    challenge: formData.get('challenge'),
+                    solution: formData.get('solution'),
+                    results: [...tempResults],
+                    testimonial: formData.get('testimonial'),
+                    image: formData.get('image') || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600',
+                    featured: formData.get('featured') === 'on'
+                };
+
+                dataManager.addPortfolio(portfolio);
+                renderPortfolios();
+                closeModal('add-portfolio-modal');
+                form.reset();
+                tempResults = [];
+                renderResults();
+                showToast('포트폴리오가 추가되었습니다!', 'success');
+            });
+        }
+    </script>
+</body>
+
+</html>

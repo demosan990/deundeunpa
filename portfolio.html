@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>포트폴리오 | 정이든 마케팅</title>
+    <meta name="description" content="AI강사, 사주상담가, 소상공인 등 다양한 업종의 성공 사례를 확인하세요.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .page-header {
+            padding: 140px 0 60px;
+            background: var(--bg-secondary);
+            text-align: center;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .page-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 16px;
+        }
+
+        .page-desc {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .filter-section {
+            padding: 40px 0;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 24px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .portfolio-page-section {
+            padding: 0 0 100px;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        @media (max-width: 1024px) {
+            .portfolio-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .portfolio-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .portfolio-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary);
+        }
+
+        .portfolio-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .portfolio-content {
+            padding: 24px;
+        }
+
+        .portfolio-category {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(99, 102, 241, 0.15);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary-light);
+            margin-bottom: 12px;
+        }
+
+        .portfolio-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .portfolio-client {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .portfolio-results {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .portfolio-result-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8125rem;
+            color: #10B981;
+            font-weight: 600;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: var(--z-modal);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal.open {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 40px;
+            height: 40px;
+            background: var(--bg-tertiary);
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .modal-body {
+            padding: 32px;
+        }
+
+        .modal-category {
+            display: inline-block;
+            padding: 6px 14px;
+            background: rgba(99, 102, 241, 0.15);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--primary-light);
+            margin-bottom: 16px;
+        }
+
+        .modal-title {
+            font-size: 1.75rem;
+            margin-bottom: 8px;
+        }
+
+        .modal-client {
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .modal-section {
+            margin-bottom: 24px;
+        }
+
+        .modal-section-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--primary-light);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .modal-section-content {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .modal-results {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        @media (max-width: 640px) {
+            .modal-results {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .modal-result-card {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .modal-result-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .modal-result-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .modal-testimonial {
+            background: var(--bg-tertiary);
+            border-left: 4px solid var(--primary);
+            border-radius: 0 12px 12px 0;
+            padding: 20px 24px;
+            margin-top: 24px;
+        }
+
+        .modal-testimonial-text {
+            font-style: italic;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-logo">
+                <img src="assets/images/logo.png" alt="정이든 마케팅" class="navbar-logo-img">
+            </a>
+
+            <div class="navbar-menu">
+                <a href="index.html" class="navbar-link">홈</a>
+                <a href="portfolio.html" class="navbar-link active">포트폴리오</a>
+                <a href="services.html" class="navbar-link">서비스</a>
+                <a href="contact.html" class="navbar-link">문의하기</a>
+            </div>
+
+            <div class="navbar-actions">
+                <button class="theme-toggle" aria-label="테마 변경">☀️</button>
+                <a href="contact.html" class="btn btn-primary btn-sm">무료 상담</a>
+                <button class="mobile-menu-btn" aria-label="메뉴 열기">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1 class="page-title">포트폴리오</h1>
+            <p class="page-desc">다양한 업종의 고객과 함께 만들어낸 성공 사례를 확인하세요.</p>
+        </div>
+    </header>
+
+    <!-- Filter Section -->
+    <section class="filter-section">
+        <button class="filter-btn active" data-filter="all">전체</button>
+        <button class="filter-btn" data-filter="lesson-coaching">레슨 및 코칭</button>
+        <button class="filter-btn" data-filter="counselor">상담가</button>
+        <button class="filter-btn" data-filter="small-business">소상공인</button>
+        <button class="filter-btn" data-filter="sales">영업직</button>
+    </section>
+
+    <!-- Portfolio Grid -->
+    <section class="portfolio-page-section">
+        <div class="container">
+            <div class="portfolio-grid" id="portfolio-grid">
+                <!-- 동적으로 생성됨 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Modal -->
+    <div class="modal" id="portfolio-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('portfolio-modal')">×</button>
+            <img src="" alt="" class="modal-image" id="modal-image">
+            <div class="modal-body" id="modal-body">
+                <!-- 동적으로 생성됨 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-brand-logo">
+                        <img src="assets/images/logo.png" alt="정이든 마케팅" class="footer-logo-img">
+                    </div>
+                    <p class="footer-brand-desc">
+                        정직한 · 이로운 · 든든한<br>
+                        AI와 바이브코딩으로 비즈니스 성장을 돕습니다.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="footer-heading">서비스</h4>
+                    <div class="footer-links">
+                        <a href="services.html#crm" class="footer-link">CRM 구축</a>
+                        <a href="services.html#education" class="footer-link">AI와 바이브코딩 교육</a>
+                        <a href="services.html#consulting" class="footer-link">온라인 BM 컨설팅</a>
+                        <a href="services.html#marketing" class="footer-link">온라인 마케팅 대행</a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="footer-heading">바로가기</h4>
+                    <div class="footer-links">
+                        <a href="portfolio.html" class="footer-link">포트폴리오</a>
+                        <a href="contact.html" class="footer-link">문의하기</a>
+                        <a href="admin.html" class="footer-link">관리자</a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="footer-heading">문의</h4>
+                    <div class="footer-links">
+                        <a href="mailto:contact@jeid.marketing" class="footer-link">contact@jeid.marketing</a>
+                        <span class="footer-link">평일 10:00 - 18:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2025 정이든 마케팅. All rights reserved.</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Instagram">📷</a>
+                    <a href="#" aria-label="YouTube">▶️</a>
+                    <a href="#" aria-label="Blog">📝</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        let currentFilter = 'all';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPortfolios();
+            initFilters();
+        });
+
+        function initFilters() {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentFilter = btn.dataset.filter;
+                    renderPortfolios();
+                });
+            });
+        }
+
+        function renderPortfolios() {
+            const container = document.getElementById('portfolio-grid');
+            const portfolios = dataManager.getPortfoliosByCategory(currentFilter);
+
+            if (portfolios.length === 0) {
+                container.innerHTML = `
+          <div class="empty-state" style="grid-column: 1/-1;">
+            <div class="empty-state-icon">📂</div>
+            <p>해당 카테고리에 포트폴리오가 없습니다.</p>
+          </div>
+        `;
+                return;
+            }
+
+            container.innerHTML = portfolios.map((item, index) => `
+        <div class="portfolio-card reveal" style="animation-delay: ${index * 0.1}s;" onclick="openPortfolioModal(${item.id})">
+          <img src="${item.image}" alt="${item.title}" class="portfolio-image" loading="lazy">
+          <div class="portfolio-content">
+            <span class="portfolio-category">${item.categoryLabel}</span>
+            <h3 class="portfolio-title">${item.title}</h3>
+            <p class="portfolio-client">${item.client}</p>
+            <div class="portfolio-results">
+              ${item.results.slice(0, 2).map(r => `
+                <div class="portfolio-result-item">
+                  <span>📈</span>
+                  <span>${r.label} ${r.value}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+            // Scroll reveal 재초기화
+            initScrollReveal();
+        }
+
+        function openPortfolioModal(id) {
+            const portfolio = dataManager.getPortfolioById(id);
+            if (!portfolio) return;
+
+            document.getElementById('modal-image').src = portfolio.image;
+            document.getElementById('modal-image').alt = portfolio.title;
+
+            document.getElementById('modal-body').innerHTML = `
+        <span class="modal-category">${portfolio.categoryLabel}</span>
+        <h2 class="modal-title">${portfolio.title}</h2>
+        <p class="modal-client">${portfolio.client}</p>
+        
+        <div class="modal-section">
+          <h4 class="modal-section-title">프로젝트 개요</h4>
+          <p class="modal-section-content">${portfolio.description}</p>
+        </div>
+        
+        <div class="modal-section">
+          <h4 class="modal-section-title">문제 상황</h4>
+          <p class="modal-section-content">${portfolio.challenge}</p>
+        </div>
+        
+        <div class="modal-section">
+          <h4 class="modal-section-title">솔루션</h4>
+          <p class="modal-section-content">${portfolio.solution}</p>
+        </div>
+        
+        <div class="modal-results">
+          ${portfolio.results.map(r => `
+            <div class="modal-result-card">
+              <div class="modal-result-value">${r.value}</div>
+              <div class="modal-result-label">${r.label}</div>
+            </div>
+          `).join('')}
+        </div>
+        
+        ${portfolio.testimonial ? `
+          <div class="modal-testimonial">
+            <p class="modal-testimonial-text">"${portfolio.testimonial}"</p>
+          </div>
+        ` : ''}
+      `;
+
+            openModal('portfolio-modal');
+        }
+    </script>
+</body>
+
+</html>

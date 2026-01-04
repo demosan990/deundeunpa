@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문의하기 | 정이든 마케팅</title>
+    <meta name="description" content="온라인 마케팅, CRM 구축, AI 교육에 관한 문의를 남겨주세요.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .page-header {
+            padding: 140px 0 60px;
+            background: var(--bg-secondary);
+            text-align: center;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .page-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 16px;
+        }
+
+        .page-desc {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-section {
+            padding: 80px 0;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 60px;
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .contact-form-container {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        .contact-form-title {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .contact-form-desc {
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 640px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        @media (max-width: 640px) {
+            .checkbox-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-item:hover {
+            border-color: var(--primary);
+        }
+
+        .checkbox-item input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+
+        .checkbox-item input:checked+span {
+            color: var(--primary-light);
+        }
+
+        .checkbox-item span {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .contact-info-container {
+            position: sticky;
+            top: 100px;
+        }
+
+        .contact-info-card {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 32px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 24px;
+        }
+
+        .contact-info-title {
+            font-size: 1.125rem;
+            margin-bottom: 24px;
+        }
+
+        .contact-info-item {
+            display: flex;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .contact-info-item:last-child {
+            border-bottom: none;
+        }
+
+        .contact-info-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .contact-info-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+
+        .contact-info-value {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .faq-card {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 32px;
+            backdrop-filter: blur(10px);
+        }
+
+        .faq-title {
+            font-size: 1.125rem;
+            margin-bottom: 20px;
+        }
+
+        .faq-item {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            font-size: 0.9375rem;
+        }
+
+        .faq-answer {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .success-message {
+            text-align: center;
+            padding: 60px 40px;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .success-title {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        .success-desc {
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-logo">
+                <img src="assets/images/logo.png" alt="정이든 마케팅" class="navbar-logo-img">
+            </a>
+
+            <div class="navbar-menu">
+                <a href="index.html" class="navbar-link">홈</a>
+                <a href="portfolio.html" class="navbar-link">포트폴리오</a>
+                <a href="services.html" class="navbar-link">서비스</a>
+                <a href="contact.html" class="navbar-link active">문의하기</a>
+            </div>
+
+            <div class="navbar-actions">
+                <button class="theme-toggle" aria-label="테마 변경">☀️</button>
+                <a href="contact.html" class="btn btn-primary btn-sm">무료 상담</a>
+                <button class="mobile-menu-btn" aria-label="메뉴 열기">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1 class="page-title">문의하기</h1>
+            <p class="page-desc">궁금한 점이 있으시면 언제든 문의해주세요. 빠르게 답변드리겠습니다.</p>
+        </div>
+    </header>
+
+    <!-- Contact Section -->
+    <section class="contact-section">
+        <div class="container">
+            <div class="contact-grid">
+                <!-- Contact Form -->
+                <div class="contact-form-container reveal" id="form-container">
+                    <h2 class="contact-form-title">무료 상담 신청</h2>
+                    <p class="contact-form-desc">아래 양식을 작성해주시면 1영업일 이내 연락드리겠습니다.</p>
+
+                    <form id="contact-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="name">이름 *</label>
+                                <input type="text" id="name" name="name" class="form-input" placeholder="홍길동" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="phone">연락처 *</label>
+                                <input type="tel" id="phone" name="phone" class="form-input" placeholder="010-1234-5678"
+                                    required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="email">이메일 *</label>
+                            <input type="email" id="email" name="email" class="form-input"
+                                placeholder="example@email.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="business">업종</label>
+                            <select id="business" name="business" class="form-select">
+                                <option value="">업종을 선택해주세요</option>
+                                <option value="instructor">강사 / 교육</option>
+                                <option value="counselor">상담사 / 코치</option>
+                                <option value="small-business">소상공인 / 자영업</option>
+                                <option value="sales">영업 / B2B</option>
+                                <option value="freelancer">프리랜서 / 1인 사업</option>
+                                <option value="other">기타</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">관심 서비스 (복수 선택 가능)</label>
+                            <div class="checkbox-grid">
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="services" value="crm">
+                                    <span>CRM 구축</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="services" value="education">
+                                    <span>AI와 바이브코딩 교육</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="services" value="consulting">
+                                    <span>온라인 BM 컨설팅</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="services" value="marketing">
+                                    <span>온라인 마케팅 대행</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="message">문의 내용</label>
+                            <textarea id="message" name="message" class="form-textarea"
+                                placeholder="현재 상황이나 원하시는 것을 자유롭게 작성해주세요."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+                            문의 보내기 →
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="contact-info-container">
+                    <div class="contact-info-card reveal">
+                        <h3 class="contact-info-title">연락처 정보</h3>
+
+                        <div class="contact-info-item">
+                            <div class="contact-info-icon">📧</div>
+                            <div>
+                                <div class="contact-info-label">이메일</div>
+                                <div class="contact-info-value">contact@jeid.marketing</div>
+                            </div>
+                        </div>
+
+                        <div class="contact-info-item">
+                            <div class="contact-info-icon">⏰</div>
+                            <div>
+                                <div class="contact-info-label">상담 가능 시간</div>
+                                <div class="contact-info-value">평일 10:00 - 18:00</div>
+                            </div>
+                        </div>
+
+                        <div class="contact-info-item">
+                            <div class="contact-info-icon">💬</div>
+                            <div>
+                                <div class="contact-info-label">응답 시간</div>
+                                <div class="contact-info-value">1영업일 이내</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-card reveal">
+                        <h3 class="faq-title">자주 묻는 질문</h3>
+
+                        <div class="faq-item">
+                            <div class="faq-question">Q. 상담 비용이 있나요?</div>
+                            <div class="faq-answer">첫 상담은 무료입니다. 비즈니스 상황을 파악하고 맞춤 솔루션을 제안해드립니다.</div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question">Q. 어떤 업종이든 가능한가요?</div>
+                            <div class="faq-answer">네, 1인 사업자부터 소상공인까지 다양한 업종에 맞춤 서비스를 제공합니다.</div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question">Q. 코딩을 몰라도 되나요?</div>
+                            <div class="faq-answer">물론입니다! 바이브코딩 교육은 비개발자도 쉽게 따라할 수 있도록 설계되어 있습니다.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-brand-logo">
+                        <img src="assets/images/logo.png" alt="정이든 마케팅" class="footer-logo-img">
+                    </div>
+                    <p class="footer-brand-desc">
+                        정직한 · 이로운 · 든든한<br>
+                        AI와 바이브코딩으로 비즈니스 성장을 돕습니다.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="footer-heading">서비스</h4>
+                    <div class="footer-links">
+                        <a href="services.html#crm" class="footer-link">CRM 구축</a>
+                        <a href="services.html#education" class="footer-link">AI와 바이브코딩 교육</a>
+                        <a href="services.html#consulting" class="footer-link">온라인 BM 컨설팅</a>
+                        <a href="services.html#marketing" class="footer-link">온라인 마케팅 대행</a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="footer-heading">바로가기</h4>
+                    <div class="footer-links">
+                        <a href="portfolio.html" class="footer-link">포트폴리오</a>
+                        <a href="contact.html" class="footer-link">문의하기</a>
+                        <a href="admin.html" class="footer-link">관리자</a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="footer-heading">문의</h4>
+                    <div class="footer-links">
+                        <a href="mailto:contact@jeid.marketing" class="footer-link">contact@jeid.marketing</a>
+                        <span class="footer-link">평일 10:00 - 18:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2025 정이든 마케팅. All rights reserved.</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Instagram">📷</a>
+                    <a href="#" aria-label="YouTube">▶️</a>
+                    <a href="#" aria-label="Blog">📝</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initContactForm();
+        });
+
+        function initContactForm() {
+            const form = document.getElementById('contact-form');
+            const formContainer = document.getElementById('form-container');
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                // 폼 데이터 수집
+                const formData = new FormData(form);
+                const services = formData.getAll('services');
+
+                const inquiry = {
+                    name: formData.get('name'),
+                    phone: formData.get('phone'),
+                    email: formData.get('email'),
+                    business: formData.get('business'),
+                    services: services,
+                    message: formData.get('message')
+                };
+
+                // localStorage에 저장
+                try {
+                    dataManager.addInquiry(inquiry);
+
+                    // 성공 메시지 표시
+                    formContainer.innerHTML = `
+            <div class="success-message">
+              <div class="success-icon">✅</div>
+              <h2 class="success-title">문의가 접수되었습니다!</h2>
+              <p class="success-desc">
+                ${inquiry.name}님, 감사합니다.<br>
+                1영업일 이내에 ${inquiry.email}로 답변드리겠습니다.
+              </p>
+              <a href="index.html" class="btn btn-primary">홈으로 돌아가기</a>
+            </div>
+          `;
+
+                    showToast('문의가 성공적으로 접수되었습니다!', 'success');
+                } catch (error) {
+                    showToast('문의 접수 중 오류가 발생했습니다. 다시 시도해주세요.', 'error');
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
